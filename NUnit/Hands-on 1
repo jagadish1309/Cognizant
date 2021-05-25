@@ -1,0 +1,109 @@
+Mathlibrary.Cs
+
+using System;
+
+namespace CalcLibrary
+{
+    interface IMathLibrary
+    {
+        double Addition(double a, double b);
+        double Subtraction(double a, double b);
+        double Multiplication(double a, double b);
+        double Division(double a, double b);
+    }
+
+    public class SimpleCalculator : IMathLibrary
+    {
+        double result = 0;
+        public double Addition(double a, double b)
+        {
+            result = a + b;
+            return result;
+        }
+
+        public double Subtraction(double a, double b)
+        {
+            result = a - b;
+            return result;
+        }
+
+        public double Multiplication(double a, double b)
+        {
+            result = a * b;
+            return result;
+        }
+
+        public double Division(double a, double b)
+        {
+            if (b == 0)
+                throw new ArgumentException("Second Parameter Can't be Zero");
+            result = a / b;
+            return result;
+        }
+
+        public void AllClear()
+        {
+            result = 0;
+        }
+
+        public double GetResult
+        {
+            get { return result; }            
+        }
+    }
+}
+
+
+Calculator.Tests
+
+using CalcLibrary;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using System;
+
+namespace Calculator.Tests
+{
+    [TestFixture]
+    public class CalculatorTests
+    {
+        SimpleCalculator cal;
+        [SetUp]
+        public void SetUp()
+        {
+            cal = new SimpleCalculator();
+        }
+        [TearDown]
+        public void Dispose()
+        {
+            cal = null;
+        }
+        [TestCase]
+        public void Addition_test_1()
+        {
+            double actualRes = cal.Addition(10, 25);
+            Assert.That(actualRes, Is.EqualTo(35));
+        }
+        [TestCase]
+        public void Subtraction_test_1()
+        {
+
+            double actualRes = cal.Subtraction(5, 1);
+            Assert.That(actualRes, Is.EqualTo(4));
+        }
+        [TestCase]
+        public void Multiplication_Test_1()
+        {
+
+            double actualRes = cal.Multiplication(9, 5);
+            Assert.That(actualRes, Is.EqualTo(45));
+        }
+        [TestCase]
+        public void Divide_Test_1()
+        {
+
+            double actualRes = cal.Division(100, 5);
+            Assert.That(actualRes, Is.EqualTo(20));
+        }
+    }
+
+}
