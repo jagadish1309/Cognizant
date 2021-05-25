@@ -1,0 +1,77 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AccountsManagerLib
+{
+    public class AccountsManager
+    {
+        public string ValidateUser(string userId, string password)
+        {
+            string outputMsg;
+
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(password))
+            {
+                throw new FormatException("Both user id and password are mandatory");
+            }
+
+            if ((userId.Equals("user_11") && password.Equals("secret@user11")) || (userId.Equals("user_22") && password.Equals("secret@user22")))
+            {
+                outputMsg = string.Format("Welcome {0}!!!", userId);
+            }
+            else
+            {
+                outputMsg = "Invalid user id/password";
+            }
+
+            return outputMsg;
+        }
+    }
+}
+
+UserTests1.cs
+using AccountsManagerLib;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using System;
+
+namespace AccountManagerLib.Tests
+{
+    [TestFixture]
+    public class SUTTests
+    {
+        AccountsManager ams;
+        [SetUp]
+        public void SetUp()
+        {
+            ams = new AccountsManager();
+        }
+        [TestCase]
+        public void ValidateUser_Test_1()
+        {
+
+            string actualRes = ams.ValidateUser("user_11", "secret@user11");
+            Assert.That(actualRes, Is.EqualTo("Welcome user_11!!!"));
+        }
+        [TestCase]
+        public void ValidateUser_Test_2()
+        {
+
+            string actualRes = ams.ValidateUser("user_1151", "secret@user11");
+            Assert.That(actualRes, Is.EqualTo("Invalid user id/password"));
+        }
+
+        [TestCase]
+        public void ValidateUser_Test_3()
+        {
+
+            Assert.Throws(Is.TypeOf<FormatException>()
+                    .And.Message.EqualTo("Both user id and password are mandatory"),
+                  () => ams.ValidateUser("", ""));
+
+        }
+    }
+
+}
