@@ -1,0 +1,70 @@
+UrlHostNameParser.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace UtilLib
+{
+    public class UrlHostNameParser
+    {
+        public string ParseHostName(string url)
+        {
+            string protocol = url.Split(':')[0];
+
+            if (protocol.Equals("http")|| protocol.Equals("https"))
+            {
+                string hostName = url.Split(':')[1].Substring(2).Split('/')[0];
+
+                return hostName;
+                
+            }
+            else
+            {
+                throw new FormatException("Url is not in correct format");
+            }
+        }
+    }
+}
+
+UnitTest1.cs
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using System;
+using UtilLib;
+
+namespace Utilitylib.Tests
+{
+    [TestFixture]
+    class UrlTests
+    {
+        UrlHostNameParser uhp;
+        [SetUp]
+        public void SetUp()
+        {
+            uhp = new UrlHostNameParser();
+        }
+        [TearDown]
+        public void Dispose()
+        {
+            uhp = null;
+        }
+
+        [TestCase]
+        public void ParseHostNameForAmazon()
+        {
+            string actualRes = uhp.ParseHostName("https://amazon.com");
+            Assert.That(actualRes, Is.EqualTo("amazon.com"));
+        }
+
+
+        [TestCase]
+        public void ParseHostNameForException()
+        {
+            var flag = Assert.Throws<FormatException>(() => uhp.ParseHostName("https12://google.com"));
+            Assert.That(flag.Message, Is.EqualTo("Url is not in correct format"));
+        }
+    }
+
+}
