@@ -1,0 +1,130 @@
+MathLibrary.cs
+using System;
+
+namespace CalcLibrary
+{
+    interface IMathLibrary
+    {
+        double Addition(double a, double b);
+        double Subtraction(double a, double b);
+        double Multiplication(double a, double b);
+        double Division(double a, double b);
+    }
+
+    public class SimpleCalculator : IMathLibrary
+    {
+        double result = 0;
+        public double Addition(double a, double b)
+        {
+            result = a + b;
+            return result;
+        }
+
+        public double Subtraction(double a, double b)
+        {
+            result = a - b;
+            return result;
+        }
+
+        public double Multiplication(double a, double b)
+        {
+            result = a * b;
+            return result;
+        }
+
+        public double Division(double a, double b)
+        {
+            if (b == 0)
+                throw new ArgumentException("Second Parameter Can't be Zero");
+            result = a / b;
+            return result;
+        }
+
+        public void AllClear()
+        {
+            result = 0;
+        }
+
+        public double GetResult
+        {
+            get { return result; }            
+        }
+    }
+}
+
+UnitTest2.cs
+using CalcLibrary;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Calculator.Tests
+{
+    [TestFixture]
+    class UnitTest2
+    {
+        SimpleCalculator cal;
+        [SetUp]
+        public void SetUp()
+        {
+            cal = new SimpleCalculator();
+        }
+        [TearDown]
+        public void Dispose()
+        {
+            cal = null;
+        }
+        [TestCase]
+        public void Subtractin_Test_1()
+        {
+            double actualRes = cal.Subtraction(5, 1);
+            Assert.AreEqual(actualRes, 4);
+        }
+        [TestCase]
+        public void Subtractin_Test_2()
+        {
+
+            double actualRes = cal.Subtraction(25,50);
+            Assert.AreEqual(actualRes, -25);
+        }
+        [TestCase]
+        public void Multiplication_Test_1()
+        {
+
+            double actualRes = cal.Multiplication(5,5);
+            Assert.AreEqual(actualRes, 25);
+        }
+        [TestCase]
+        public void Multiplication_Test_2()
+        {
+
+            double actualRes = cal.Multiplication(6, 0);
+            Assert.AreEqual(actualRes, 0);
+        }
+        [TestCase]
+        public void Division_Test_1()
+        {
+
+            double actualRes = cal.Division(10, 5);
+            Assert.AreEqual(actualRes, 2);
+        }
+        [TestCase]
+        public void Division_Test_2()
+        {
+
+            double actualRes = cal.Division(50, 10);
+            Assert.AreEqual(actualRes, 5);
+        }
+        [TestCase]
+        public void Division_Test_Exception()
+        {
+
+            var flag = Assert.Throws<ArgumentException>(() => cal.Division(65, 0));
+            Assert.AreEqual("Second Parameter Can't be Zero", flag.Message);
+        }
+
+    }
+}
